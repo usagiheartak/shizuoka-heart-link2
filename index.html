@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>しずおかハートリンク（S-HF link） | 静岡心不全連携システム | 静岡市静岡医師会</title>
+<meta name="description" content="2026年6月キックオフ。早期介入からACP・看取りまで、ICTと多職種で紡ぐシームレスな心不全地域連携。かかりつけ医のための診療ガイド・連携シートを提供します。">
+<meta name="theme-color" content="#1e4d7b">
+
+<!-- フォント -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   デザイントークン - 案2: 中間案（糖尿病連携HPと統一）
+   ============================================================ */
+:root{
+  /* Colors — 静岡医師会標準カラー */
+  --ink:           #1a2332;       /* 本文 */
+  --ink-soft:      #4a5568;       /* 副文 */
+  --ink-muted:     #718096;       /* キャプション */
+
+  --primary:       #1e4d7b;       /* 静岡医師会ブルー */
+  --primary-deep:  #163958;
+  --primary-soft:  #e8f0f7;
+
+  /* Zones — BNP/NT-proBNP 5段階（彩度40%減・医療的な落ち着き）*/
+  --zone-1: #6db57e;              /* 緑：除外（やや淡く）*/
+  --zone-2: #d4c26f;              /* 黄：経過観察（やや淡く）*/
+  --zone-3: #d4a675;              /* 淡橙：前心不全（さらに淡く）*/
+  --zone-4: #c98668;              /* 橙：心不全（落ち着いた）*/
+  --zone-5: #a84840;              /* 赤：高リスク（やや暗く）*/
+
+  --bg:           #ffffff;        /* 純白背景 */
+  --surface:      #ffffff;
+  --surface-2:    #f5f7fa;
+  --border:       #e2e8f0;
+  --border-soft:  #edf2f7;
+
+  /* Shadows - やや控えめ */
+  --shadow-sm: 0 1px 2px rgba(26,35,50,.05);
+  --shadow:    0 4px 10px rgba(26,35,50,.07);
+  --shadow-lg: 0 10px 28px rgba(26,35,50,.09);
+
+  /* Type */
+  --serif: 'Noto Serif JP', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+  --sans:  'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+}
+
+/* ============================================================
+   Reset & base
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{
+  margin:0;
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:16px;
+  line-height:1.75;
+  color:var(--ink);
+  background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--primary);text-decoration:none;transition:opacity .2s, color .2s}
+a:hover{opacity:.75}
+button{font-family:inherit;cursor:pointer}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+.container{
+  max-width:1080px;
+  margin-inline:auto;
+  padding-inline:24px;
+}
+.section{padding:80px 0;border-bottom:1px solid var(--border-soft)}
+.section:last-of-type{border-bottom:none}
+
+/* ============================================================
+   Typography
+   ============================================================ */
+.section-eyebrow{
+  display:inline-block;
+  font-family:var(--sans);
+  font-size:.78rem;
+  font-weight:700;
+  letter-spacing:.18em;
+  color:var(--primary);
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+h2.section-title{
+  font-family:var(--serif);
+  font-size:clamp(1.6rem, 3.4vw, 2.15rem);
+  font-weight:700;
+  line-height:1.4;
+  margin:0 0 12px;
+  color:var(--ink);
+  letter-spacing:.01em;
+}
+h2.section-title::after{
+  content:"";
+  display:block;
+  width:48px;
+  height:3px;
+  background:var(--primary);
+  margin-top:18px;
+}
+.section-lede{
+  font-size:1.02rem;
+  color:var(--ink-soft);
+  max-width:720px;
+  margin:0 0 40px;
+}
+h3{
+  font-family:var(--serif);
+  font-size:1.32rem;
+  font-weight:700;
+  margin:42px 0 18px;
+  color:var(--primary-deep);
+  line-height:1.5;
+}
+h4{
+  font-family:var(--sans);
+  font-size:1.08rem;
+  font-weight:700;
+  margin:22px 0 10px;
+  color:var(--ink);
+}
+
+/* ============================================================
+   Top bar (kickoff banner)
+   ============================================================ */
+.kickoff-bar{
+  background:linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+  color:#fff;
+  padding:10px 0;
+  font-size:.9rem;
+  text-align:center;
+  font-weight:500;
+}
+.kickoff-bar strong{font-weight:700;letter-spacing:.05em}
+.kickoff-bar a{color:#fff;text-decoration:underline;margin-left:10px;font-weight:600}
+
+/* ============================================================
+   Header (hero)
+   ============================================================ */
+.hero{
+  background:
+    radial-gradient(ellipse at top right, rgba(200,85,107,.08), transparent 50%),
+    radial-gradient(ellipse at bottom left, rgba(30,77,123,.06), transparent 50%),
+    var(--bg);
+  padding:64px 0 56px;
+  border-bottom:1px solid var(--border-soft);
+}
+.hero-affiliation{
+  font-size:.85rem;
+  color:var(--ink-muted);
+  letter-spacing:.05em;
+  margin-bottom:18px;
+}
+.hero-affiliation::before{
+  content:"❤";
+  color:var(--primary);
+  margin-right:8px;
+}
+.hero-title{
+  font-family:var(--serif);
+  font-size:clamp(1.85rem, 4.8vw, 2.95rem);
+  font-weight:900;
+  line-height:1.3;
+  margin:0 0 8px;
+  color:var(--primary-deep);
+  letter-spacing:.01em;
+}
+.hero-subtitle{
+  font-family:var(--serif);
+  font-size:clamp(1.05rem, 2.2vw, 1.32rem);
+  font-weight:500;
+  margin:0 0 24px;
+  color:var(--primary-deep);
+}
+.hero-tagline{
+  font-size:1rem;
+  color:var(--ink-soft);
+  max-width:680px;
+  margin:0 0 32px;
+  line-height:1.85;
+}
+.hero-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px;
+  padding:20px 24px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-left:4px solid var(--primary);
+  border-radius:4px;
+  box-shadow:var(--shadow-sm);
+}
+.hero-meta-item{font-size:.92rem;line-height:1.6}
+.hero-meta-item .label{
+  display:block;
+  font-size:.72rem;
+  font-weight:700;
+  color:var(--primary);
+  letter-spacing:.12em;
+  margin-bottom:2px;
+}
+.hero-meta-item .value{color:var(--ink);font-weight:500}
+
+/* ============================================================
+   Navigation
+   ============================================================ */
+.nav{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(253,251,247,.94);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border-soft);
+}
+.nav-list{
+  display:flex;
+  justify-content:center;
+  list-style:none;
+  margin:0;
+  padding:12px 0;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.nav-list a{
+  display:inline-block;
+  padding:8px 14px;
+  font-size:.88rem;
+  font-weight:500;
+  color:var(--ink-soft);
+  border-radius:6px;
+  transition:all .2s;
+}
+.nav-list a:hover{
+  color:var(--primary);
+  background:var(--primary-soft);
+  opacity:1;
+}
+
+/* ============================================================
+   System overview cards
+   ============================================================ */
+.overview-intro{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:32px 36px;
+  margin-bottom:36px;
+  box-shadow:var(--shadow-sm);
+  position:relative;
+}
+.overview-intro::before{
+  content:"";
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:4px;
+  background:var(--primary);
+  border-radius:4px 0 0 4px;
+}
+.overview-intro p{margin:0 0 14px;line-height:1.95}
+.overview-intro p:last-child{margin-bottom:0}
+.overview-intro .accent{color:var(--primary-deep);font-weight:700}
+
+.phase-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:20px;
+  margin-top:36px;
+}
+.phase-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:28px 24px;
+  position:relative;
+  transition:transform .25s, box-shadow .25s;
+}
+.phase-card:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow);
+}
+.phase-card .phase-num{
+  font-family:var(--serif);
+  font-size:2.6rem;
+  font-weight:900;
+  line-height:1;
+  color:var(--primary-soft);
+  position:absolute;
+  top:14px;right:18px;
+  user-select:none;
+}
+.phase-card .phase-badge{
+  display:inline-block;
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  color:var(--primary);
+  margin-bottom:10px;
+}
+.phase-card h4{margin:0 0 10px;font-size:1.12rem;color:var(--primary-deep)}
+.phase-card p{margin:0;font-size:.92rem;color:var(--ink-soft);line-height:1.8}
+
+/* ============================================================
+   Flow diagram
+   ============================================================ */
+.flow-image-wrap{
+  margin:30px 0;
+  padding:24px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  text-align:center;
+  box-shadow:var(--shadow-sm);
+}
+.flow-image-wrap img{margin-inline:auto;border-radius:4px}
+.flow-caption{
+  margin-top:14px;
+  font-size:.88rem;
+  color:var(--ink-muted);
+  text-align:center;
+}
+
+/* ============================================================
+   Process steps (連携の実際)
+   ============================================================ */
+.process-step{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:28px 30px;
+  margin-bottom:24px;
+  position:relative;
+  overflow:hidden;
+}
+.process-step::before{
+  content:"";
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:4px;
+  background:var(--primary);
+}
+.process-step h4{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:0 0 16px;
+  font-size:1.1rem;
+  color:var(--primary-deep);
+}
+.process-step h4 .step-num{
+  display:inline-flex;
+  align-items:center;justify-content:center;
+  width:28px;height:28px;
+  background:var(--primary);
+  color:#fff;
+  border-radius:50%;
+  font-size:.85rem;
+  font-weight:700;
+}
+.process-step .target{
+  font-size:.92rem;
+  background:var(--primary-soft);
+  padding:8px 14px;
+  border-radius:4px;
+  margin-bottom:18px;
+  color:var(--ink-soft);
+}
+.process-step .target strong{color:var(--primary-deep)}
+.process-step ol{padding-left:1.4em;margin:0}
+.process-step ol li{margin-bottom:14px;line-height:1.8}
+.doc-attached{
+  background:var(--surface-2);
+  border:1px dashed var(--border);
+  border-radius:6px;
+  padding:12px 18px;
+  margin-top:10px;
+  font-size:.9rem;
+}
+.doc-attached strong{
+  display:block;
+  color:var(--primary-deep);
+  font-size:.82rem;
+  letter-spacing:.05em;
+  margin-bottom:4px;
+}
+.doc-attached ul{margin:0;padding-left:1.2em;color:var(--ink-soft)}
+.doc-attached ul li{margin:2px 0;line-height:1.65}
+
+/* ============================================================
+   症例ストーリー
+   ============================================================ */
+.case-card{
+  background:linear-gradient(135deg, var(--primary-soft) 0%, var(--bg) 80%);
+  border:1px solid var(--primary-soft);
+  border-radius:10px;
+  padding:30px 32px;
+  margin-bottom:24px;
+}
+.case-card h4{
+  margin:0 0 18px;
+  color:var(--primary-deep);
+  font-family:var(--serif);
+  font-size:1.2rem;
+}
+.case-profile{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px 24px;
+  font-size:.92rem;
+  margin-bottom:16px;
+}
+.case-profile div{padding:6px 0;border-bottom:1px dotted var(--border)}
+.case-profile .pf-label{font-weight:700;color:var(--primary-deep);margin-right:8px}
+
+.case-timeline{
+  position:relative;
+  padding-left:30px;
+  margin-top:24px;
+}
+.case-timeline::before{
+  content:"";
+  position:absolute;
+  left:8px;top:8px;bottom:8px;
+  width:2px;
+  background:var(--primary);
+}
+.case-step{position:relative;margin-bottom:24px}
+.case-step::before{
+  content:"";
+  position:absolute;
+  left:-30px;top:6px;
+  width:18px;height:18px;
+  background:var(--surface);
+  border:3px solid var(--primary);
+  border-radius:50%;
+}
+.case-step.heart-step::before{border-color:var(--primary)}
+.case-step h5{
+  margin:0 0 6px;
+  font-size:.95rem;
+  font-weight:700;
+  color:var(--primary-deep);
+  letter-spacing:.02em;
+}
+.case-step h5 .step-tag{
+  display:inline-block;
+  font-size:.7rem;
+  background:var(--primary);
+  color:#fff;
+  padding:2px 8px;
+  border-radius:3px;
+  margin-right:8px;
+  letter-spacing:.08em;
+  vertical-align:middle;
+}
+.case-step.heart-step h5 .step-tag{background:var(--primary)}
+.case-step p{margin:0;font-size:.92rem;color:var(--ink-soft);line-height:1.8}
+
+/* ============================================================
+   4つの共通言語
+   ============================================================ */
+.lang-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:18px;
+}
+.lang-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:22px 24px;
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+}
+.lang-num{
+  flex-shrink:0;
+  width:42px;height:42px;
+  border-radius:50%;
+  background:var(--primary-deep);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);
+  font-size:1.2rem;
+  font-weight:700;
+}
+.lang-content h4{
+  margin:0 0 4px;
+  font-size:1rem;
+  color:var(--primary-deep);
+}
+.lang-content .lang-sub{
+  font-size:.8rem;
+  color:var(--ink-muted);
+  margin-bottom:8px;
+}
+.lang-content p{
+  margin:0;
+  font-size:.9rem;
+  color:var(--ink-soft);
+  line-height:1.75;
+}
+
+/* ============================================================
+   BNP/NT-proBNP 解釈表（5段階）
+   ============================================================ */
+.bnp-alert{
+  background:var(--primary-soft);
+  border-left:4px solid var(--primary);
+  padding:14px 18px;
+  margin-bottom:24px;
+  border-radius:0 6px 6px 0;
+  font-size:.95rem;
+}
+.bnp-alert strong{color:var(--ink);font-weight:700}
+
+/* 視覚的なBNPカラーバー */
+.bnp-bar{
+  margin:20px 0 28px;
+  border-radius:6px;
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
+}
+.bnp-bar-row{
+  display:grid;
+  grid-template-columns:120px 1fr 1fr;
+  align-items:stretch;
+  background:var(--surface);
+  border-bottom:1px solid var(--border-soft);
+}
+.bnp-bar-row:last-child{border-bottom:none}
+.bnp-bar-row.head{
+  background:var(--primary-deep);
+  color:#fff;
+  font-weight:600;
+  font-size:.78rem;
+  letter-spacing:.05em;
+}
+.bnp-bar-cell{
+  padding:10px 14px;
+  font-size:.85rem;
+  display:flex;
+  align-items:center;
+  border-right:1px solid var(--border-soft);
+}
+.bnp-bar-cell:last-child{border-right:none}
+.bnp-bar-cell.zone{
+  color:#fff;
+  font-weight:700;
+  justify-content:center;
+  text-align:center;
+  font-size:.82rem;
+  line-height:1.3;
+}
+.zone-1-bg{background:var(--zone-1)}
+.zone-2-bg{background:var(--zone-2)}
+.zone-3-bg{background:var(--zone-3)}
+.zone-4-bg{background:var(--zone-4)}
+.zone-5-bg{background:var(--zone-5)}
+
+table.clinical-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  margin-bottom:24px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+  font-size:.92rem;
+}
+table.clinical-table th,
+table.clinical-table td{
+  padding:14px 16px;
+  text-align:left;
+  vertical-align:top;
+  border-bottom:1px solid var(--border-soft);
+  line-height:1.7;
+}
+table.clinical-table tr:last-child td{border-bottom:none}
+table.clinical-table th{
+  background:var(--primary-deep);
+  color:#fff;
+  font-weight:600;
+  font-size:.82rem;
+  letter-spacing:.04em;
+  white-space:nowrap;
+}
+table.clinical-table .zone-cell{
+  font-weight:700;
+  font-size:.82rem;
+  color:#fff;
+  text-align:center;
+  white-space:nowrap;
+  line-height:1.35;
+}
+table.clinical-table td strong{color:var(--ink)}
+.value-mono{
+  font-family:'SF Mono','Monaco','Consolas',monospace;
+  font-weight:600;
+  font-size:.95rem;
+}
+
+.pitfall-box{
+  background:var(--primary-soft);
+  border:1px solid #c5d6e7;
+  border-radius:6px;
+  padding:18px 22px;
+  margin:20px 0;
+  font-size:.92rem;
+}
+.pitfall-box h4{margin:0 0 10px;color:var(--primary-deep);font-size:.95rem}
+.pitfall-box ul{margin:0;padding-left:1.2em}
+.pitfall-box li{margin:4px 0;line-height:1.75}
+.pitfall-box .hilight{
+  color:var(--primary-deep);
+  font-weight:700;
+  background:linear-gradient(transparent 60%, var(--primary-soft) 60%);
+}
+
+/* ============================================================
+   Quick checklist (1枚カード)
+   ============================================================ */
+.quickcheck{
+  background:var(--surface);
+  border:2px solid var(--primary);
+  border-radius:10px;
+  padding:0;
+  margin:20px 0 32px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.quickcheck-header{
+  background:var(--primary);
+  color:#fff;
+  padding:14px 22px;
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:1.05rem;
+  letter-spacing:.02em;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.quickcheck-header::before{content:"⚑";font-size:1.2em}
+.quickcheck-body{padding:24px 26px}
+.quickcheck-block{margin-bottom:20px}
+.quickcheck-block:last-child{margin-bottom:0}
+.quickcheck-block h5{
+  margin:0 0 10px;
+  font-size:.92rem;
+  font-weight:700;
+  color:var(--primary-deep);
+  border-bottom:1px solid var(--primary-soft);
+  padding-bottom:6px;
+}
+.quickcheck-items{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+  gap:10px 18px;
+}
+.quickcheck-items li{
+  list-style:none;
+  font-size:.9rem;
+  line-height:1.65;
+  padding-left:24px;
+  position:relative;
+}
+.quickcheck-items li::before{
+  content:"✓";
+  position:absolute;
+  left:0;top:0;
+  color:var(--primary);
+  font-weight:700;
+}
+
+/* ============================================================
+   Reimbursement (報酬改定) section
+   ============================================================ */
+.reimburse-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:18px;
+  margin-top:24px;
+}
+.reimburse-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:22px;
+  position:relative;
+  text-align:center;
+}
+.reimburse-card .tag{
+  display:inline-block;
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  color:var(--primary);
+  margin-bottom:8px;
+}
+.reimburse-card .title{
+  font-size:1rem;
+  font-weight:700;
+  color:var(--primary-deep);
+  margin-bottom:6px;
+}
+.reimburse-card .scene{
+  font-size:.85rem;
+  color:var(--ink-soft);
+  margin-bottom:14px;
+  padding:8px 0;
+  border-bottom:1px dotted var(--border);
+}
+.reimburse-card .points{
+  font-family:var(--serif);
+  font-size:1.85rem;
+  font-weight:900;
+  color:var(--primary);
+  line-height:1.1;
+}
+.reimburse-card .points small{
+  display:block;
+  font-size:.7rem;
+  font-weight:400;
+  font-family:var(--sans);
+  color:var(--ink-muted);
+  letter-spacing:0;
+}
+.reimburse-note{
+  background:var(--primary-soft);
+  border-radius:6px;
+  padding:16px 20px;
+  margin-top:20px;
+  font-size:.9rem;
+  color:var(--ink-soft);
+  line-height:1.8;
+}
+.reimburse-note strong{color:var(--primary)}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq-item{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:6px;
+  margin-bottom:12px;
+  overflow:hidden;
+}
+.faq-q{
+  padding:14px 20px;
+  background:var(--primary-soft);
+  font-weight:700;
+  color:var(--primary-deep);
+  font-size:.95rem;
+  position:relative;
+  padding-left:48px;
+}
+.faq-q::before{
+  content:"Q";
+  position:absolute;
+  left:16px;top:12px;
+  width:24px;height:24px;
+  background:var(--primary);
+  color:#fff;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);
+  font-size:.85rem;
+}
+.faq-a{
+  padding:16px 20px 18px 48px;
+  font-size:.92rem;
+  color:var(--ink-soft);
+  line-height:1.85;
+  position:relative;
+}
+.faq-a::before{
+  content:"A";
+  position:absolute;
+  left:16px;top:16px;
+  width:24px;height:24px;
+  background:var(--primary);
+  color:#fff;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);
+  font-size:.85rem;
+}
+.faq-a ul{margin:8px 0 0;padding-left:1.2em}
+.faq-a li{margin:4px 0}
+
+/* ============================================================
+   連携シート (2方式アクセス)
+   ============================================================ */
+.sheet-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:24px;
+}
+.sheet-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:28px 30px;
+  position:relative;
+  overflow:hidden;
+}
+.sheet-card.sheet-a::before,
+.sheet-card.sheet-b::before{
+  content:"";
+  position:absolute;
+  top:0;left:0;right:0;
+  height:4px;
+}
+.sheet-card.sheet-a::before{background:linear-gradient(to right, var(--primary), var(--primary-deep))}
+.sheet-card.sheet-b::before{background:linear-gradient(to right, var(--primary-deep), var(--primary))}
+.sheet-card .sheet-tag{
+  display:inline-block;
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  margin-bottom:8px;
+}
+.sheet-card.sheet-a .sheet-tag{color:var(--primary)}
+.sheet-card.sheet-b .sheet-tag{color:var(--primary)}
+.sheet-card h4{
+  margin:0 0 6px;
+  font-family:var(--serif);
+  font-size:1.18rem;
+  color:var(--primary-deep);
+}
+.sheet-card .sheet-purpose{
+  font-size:.88rem;
+  color:var(--ink-soft);
+  margin-bottom:18px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border-soft);
+  line-height:1.75;
+}
+.sheet-actions{display:flex;flex-direction:column;gap:10px}
+.sheet-btn{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 18px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--ink);
+  font-weight:500;
+  font-size:.92rem;
+  transition:all .2s;
+}
+.sheet-btn:hover{
+  background:var(--primary-soft);
+  border-color:var(--primary);
+  color:var(--primary-deep);
+  transform:translateX(2px);
+  opacity:1;
+}
+.sheet-btn .icon{
+  font-size:1.4rem;
+  flex-shrink:0;
+}
+.sheet-btn .label-block{flex:1;line-height:1.4}
+.sheet-btn .label-block strong{display:block;font-weight:700;font-size:.95rem}
+.sheet-btn .label-block small{color:var(--ink-muted);font-size:.78rem}
+.sheet-btn.primary{
+  background:var(--primary);
+  border-color:var(--primary);
+  color:#fff;
+}
+.sheet-btn.primary:hover{
+  background:var(--primary-deep);
+  color:#fff;
+}
+.sheet-btn.primary .label-block small{color:rgba(255,255,255,.8)}
+
+/* ============================================================
+   Resources downloads
+   ============================================================ */
+.resource-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:24px;
+}
+.resource-group{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:26px 28px;
+}
+.resource-group h4{
+  margin:0 0 18px;
+  padding-bottom:10px;
+  border-bottom:2px solid var(--primary);
+  color:var(--primary-deep);
+  font-family:var(--serif);
+  font-size:1.05rem;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.btn-download{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:10px 14px;
+  margin-bottom:8px;
+  background:var(--bg);
+  border:1px solid var(--border-soft);
+  border-radius:6px;
+  color:var(--ink);
+  font-size:.9rem;
+  line-height:1.5;
+  transition:all .2s;
+  font-weight:500;
+}
+.btn-download:hover{
+  background:var(--primary-soft);
+  border-color:var(--primary);
+  color:var(--primary-deep);
+  opacity:1;
+}
+.btn-download .ico{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.resource-divider{
+  border:0;
+  border-top:1px dashed var(--border);
+  margin:14px 0;
+}
+.resource-subhead{
+  font-size:.8rem;
+  font-weight:700;
+  color:var(--ink-muted);
+  letter-spacing:.08em;
+  margin:14px 0 8px;
+}
+.facility-block{font-size:.85rem;line-height:1.85;color:var(--ink-soft)}
+.facility-block a{color:var(--primary);font-weight:500}
+.facility-block .facility-name{font-weight:700;color:var(--ink);margin-top:8px;display:block}
+
+/* ============================================================
+   5つのお願い (CTA)
+   ============================================================ */
+.requests{
+  background:linear-gradient(135deg, var(--primary-soft) 0%, var(--primary-soft) 100%);
+  border-radius:12px;
+  padding:36px 38px;
+}
+.request-list{
+  list-style:none;
+  margin:0;padding:0;
+  display:grid;
+  gap:14px;
+}
+.request-item{
+  background:var(--surface);
+  border-radius:8px;
+  padding:18px 22px;
+  display:flex;
+  gap:18px;
+  align-items:flex-start;
+  box-shadow:var(--shadow-sm);
+}
+.request-num{
+  flex-shrink:0;
+  width:36px;height:36px;
+  border-radius:50%;
+  background:var(--primary);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:1.05rem;
+}
+.request-item h5{
+  margin:0 0 4px;
+  font-size:1rem;
+  color:var(--primary-deep);
+}
+.request-item p{
+  margin:0;
+  font-size:.9rem;
+  color:var(--ink-soft);
+  line-height:1.75;
+}
+
+/* ============================================================
+   Multidisciplinary section
+   ============================================================ */
+.multi-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:20px;
+}
+.multi-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:24px;
+  border-top:3px solid var(--primary);
+}
+.multi-card.acp{border-top-color:var(--primary)}
+.multi-card h4{margin:0 0 10px;font-size:1.05rem;color:var(--primary-deep)}
+.multi-card p{margin:0 0 12px;font-size:.92rem;color:var(--ink-soft);line-height:1.8}
+.multi-card a.multi-link{
+  display:inline-block;
+  font-size:.85rem;
+  font-weight:600;
+  color:var(--primary);
+  padding:6px 0;
+}
+.multi-card a.multi-link::after{content:" →"}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+footer.site-footer{
+  background:var(--primary-deep);
+  color:rgba(255,255,255,.85);
+  padding:50px 0 40px;
+  text-align:center;
+  font-size:.88rem;
+  line-height:1.85;
+}
+footer.site-footer .footer-title{
+  font-family:var(--serif);
+  font-size:1.1rem;
+  color:#fff;
+  margin-bottom:6px;
+  font-weight:700;
+}
+footer.site-footer .footer-sub{
+  margin-bottom:20px;
+  color:rgba(255,255,255,.7);
+  font-size:.82rem;
+}
+footer.site-footer hr{
+  border:0;
+  border-top:1px solid rgba(255,255,255,.15);
+  margin:24px auto;
+  max-width:200px;
+}
+footer.site-footer .footer-meta{
+  font-size:.78rem;
+  color:rgba(255,255,255,.6);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 900px){
+  .section{padding:60px 0}
+  .container{padding-inline:18px}
+  .phase-grid,.lang-grid,.sheet-grid,.resource-grid,.reimburse-grid,.multi-grid{
+    grid-template-columns:1fr;
+  }
+  .hero-meta{flex-direction:column;gap:14px}
+  .nav-list{padding:10px 0}
+  .nav-list a{font-size:.82rem;padding:6px 10px}
+  .bnp-bar-row{grid-template-columns:90px 1fr 1fr}
+  .bnp-bar-cell{font-size:.78rem;padding:8px 10px}
+  table.clinical-table{font-size:.84rem}
+  table.clinical-table th,table.clinical-table td{padding:10px 12px}
+  .case-profile{grid-template-columns:1fr}
+}
+
+@media (max-width: 600px){
+  .hero{padding:40px 0 36px}
+  .section{padding:48px 0}
+  .overview-intro{padding:22px 20px}
+  .process-step{padding:20px 18px}
+  .case-card{padding:22px 20px}
+  .requests{padding:24px 20px}
+  table.clinical-table th,table.clinical-table td{padding:8px}
+  .bnp-bar-row{grid-template-columns:1fr;border-radius:0}
+  .bnp-bar-cell{border-right:none;border-bottom:1px solid var(--border-soft)}
+  .bnp-bar-cell.zone{justify-content:flex-start;text-align:left;padding:8px 14px}
+  .quickcheck-body{padding:18px 16px}
+}
+
+/* ============================================================
+   Print
+   ============================================================ */
+@media print{
+  .nav,.kickoff-bar,footer.site-footer{display:none}
+  body{background:#fff;color:#000;font-size:11pt}
+  .section{padding:24pt 0;page-break-inside:avoid}
+  .hero{padding:24pt 0;background:none}
+  .quickcheck{break-inside:avoid}
+}
+
+/* ============================================================
+   Subtle reveal animation
+   ============================================================ */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease, transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<header class="hero">
+  <div class="container">
+    <h1 class="hero-title">静岡心不全連携システム<br><span style="font-size:.7em;color:var(--ink-soft);font-weight:500">（しずおかハートリンク（S-HF link））</span></h1>
+    <p class="hero-subtitle">早期介入からACP・看取りまで——ICTと多職種で紡ぐシームレスなケア</p>
+    <p class="hero-tagline">
+      心不全パンデミックを地域で支えるための連携基盤。<br>
+      かかりつけ医・専門医・訪問看護・薬剤師・ケアマネージャーが、<strong>3つのツール（連携シートA・B＋心不全手帳）</strong>でつながります。
+    </p>
+  </div>
+</header>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<nav class="nav">
+  <div class="container">
+    <ul class="nav-list">
+      <li><a href="#overview">システム概要</a></li>
+      <li><a href="#flow">連携フロー図</a></li>
+      <li><a href="#case">症例で見る</a></li>
+      <li><a href="#clinical-guide">診療ガイド</a></li>
+      <li><a href="#sheets">連携シート</a></li>
+      <li><a href="#reimburse">R8診療報酬改定</a></li>
+      <li><a href="#requests">5つのお願い</a></li>
+      <li><a href="#resources">資材ダウンロード</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============================================================
+     1. システム概要
+     ============================================================ -->
+<section id="overview" class="section">
+  <div class="container">
+    <span class="section-eyebrow">SYSTEM OVERVIEW</span>
+    <h2 class="section-title">しずおかハートリンクとは</h2>
+    <p class="section-lede">
+      症候性心不全（Stage C）の再入院予防を中心としつつ、入り口の「早期発見」と出口の「生活・人生の質の維持」を包括し、ICT・多職種連携で患者を支える、静岡市の新しい心不全地域連携です。
+    </p>
+
+    <div class="overview-intro">
+      <p>本システムは、心不全臨床ステージC（症候性心不全）を中心とした病院・かかりつけ医間の連携のみならず、<span class="accent">「早期発見（入り口）」</span>と<span class="accent">「生活・人生の質の維持（出口）」</span>を包括し、ICTを含む多職種連携で<strong>切れ目のないケア</strong>を目指します。</p>
+      <p>従来のイーツーネット医療連携が病院・かかりつけ医の<strong>「医2」</strong>（医師2人）による連携だったのに対し、心不全連携では訪問看護・薬剤師・ケアマネジャー・栄養士・療法士など多職種の参画が不可欠です。複数の職種がつながる（＝ <strong>link</strong>）ことから「しずおかハートリンク（S-HF link）」と命名しました。</p>
+    </div>
+
+    <div class="phase-grid">
+      <div class="phase-card reveal">
+        <span class="phase-num">01</span>
+        <span class="phase-badge">入り口</span>
+        <h4>早期発見・早期介入</h4>
+        <p>BNP/NT-proBNP上昇や軽微な症状の段階で気づき、専門医による精査・診断につなげる。Stage A/Bでの介入が予後を左右します。</p>
+      </div>
+      <div class="phase-card reveal">
+        <span class="phase-num">02</span>
+        <span class="phase-badge">中心</span>
+        <h4>安定期管理・再入院予防</h4>
+        <p>連携シートA・Bと心不全手帳で情報共有。Fantastic Four・SGLT2・MRAを継続し、増悪兆候の早期発見と迅速な戻し紹介を実現。</p>
+      </div>
+      <div class="phase-card reveal">
+        <span class="phase-num">03</span>
+        <span class="phase-badge">出口</span>
+        <h4>生活・ACP・看取り</h4>
+        <p>S-HFnet・シズみんシート（ACP）・シズケア＊かけはし（ICT）を活用し、患者の価値観を尊重した療養生活を地域で支える。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     2. 連携フロー図
+     ============================================================ -->
+<section id="flow" class="section">
+  <div class="container">
+    <span class="section-eyebrow">SYSTEM DIAGRAM</span>
+    <h2 class="section-title">連携フロー図</h2>
+    <p class="section-lede">
+      かかりつけ医通院中の「心不全疑い」症例から、専門医での精査、もどし紹介、安定期管理、多職種連携までの全体像。
+    </p>
+
+    <div class="flow-image-wrap">
+      <img src="images/flow-diagram.jpg" alt="静岡心不全連携システム（しずおかハートリンク）フロー図：かかりつけ医→専門医→多職種までの連携サイクル">
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     3. 連携の実際 (Process steps)
+     ============================================================ -->
+<section id="coordination" class="section">
+  <div class="container">
+    <span class="section-eyebrow">HOW IT WORKS</span>
+    <h2 class="section-title">連携の実際</h2>
+    <p class="section-lede">
+      かかりつけ医から専門医へ、そして専門医から再びかかりつけ医へ——双方向の連携を、3つのツール（連携シートA・B＋心不全手帳）でシンプルに完結させます。
+    </p>
+
+    <div class="process-step">
+      <h4><span class="step-num">1</span>かかりつけ医 → 病院（初回紹介）</h4>
+      <div class="target"><strong>対象：</strong>BNP/NT-proBNP上昇例、心不全早期、「隠れ心不全」が疑われる外来患者</div>
+      <ol>
+        <li>かかりつけ医から、専門医（病院循環器内科 / 早期心不全外来）へ紹介。
+          <div class="doc-attached">
+            <strong>添付書類</strong>
+            <ul>
+              <li>紹介状（通常の診療情報提供書）</li>
+              <li>連携シートA（かかりつけ医→専門医）</li>
+              <li>または各病院の「早期心不全外来シート」</li>
+            </ul>
+          </div>
+        </li>
+        <li>専門医にて、心エコー含む精査を実施。EF分類・Stage分類・原疾患を確定。</li>
+        <li>診断確定後、心不全連携へ登録し、かかりつけ医へ「もどし紹介」。
+          <div class="doc-attached">
+            <strong>もどし紹介時のセット</strong>
+            <ul>
+              <li>連携シートB（専門医→かかりつけ医）　※ドライウェイト・薬の注意点・もどし紹介の目安を記載</li>
+              <li>心不全手帳（記載済み、患者が日々持参）</li>
+              <li>必要時：フェイスシート、看護サマリー、リハビリサマリー、多職種カンファレンス資料</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="process-step">
+      <h4><span class="step-num">2</span>病院 → かかりつけ医（入院後の逆紹介）</h4>
+      <div class="target"><strong>対象：</strong>心不全入院後など、状態が安定し地域へ戻る患者</div>
+      <ol>
+        <li>退院前カンファレンスで多職種が情報共有（医師・看護師・薬剤師・栄養士・MSW・PT）。心不全連携へ登録。</li>
+        <li>かかりつけ医へ逆紹介。
+          <div class="doc-attached">
+            <strong>逆紹介時のセット</strong>
+            <ul>
+              <li>連携シートB（個別指示書として機能：ドライウェイト・薬剤注意点・もどし紹介の目安）</li>
+              <li>心不全手帳（入院中の体重・BNPの記録あり）</li>
+              <li>その他：看護・リハビリサマリー、カンファレンス資料、生活介護状況資料</li>
+            </ul>
+          </div>
+        </li>
+        <li><strong>かかりつけ医の役割：</strong>
+          <ul>
+            <li>定期チェック（心不全手帳の確認、定期薬の継続）</li>
+            <li>訪問看護・ケアマネ・薬剤師との情報共有（ICT活用を含む）</li>
+            <li>必要時はシズみんシート（ACP）を導入し、本人の意思を多職種で共有</li>
+            <li>状態悪化時はシートAで早期もどし紹介</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     4. 症例で見る連携 (NEW)
+     ============================================================ -->
+<section id="case" class="section">
+  <div class="container">
+    <span class="section-eyebrow">CASE STUDY</span>
+    <h2 class="section-title">症例で見る、システム運用の実際</h2>
+    <p class="section-lede">
+      しずおかハートリンクが実際にどう回るのか、典型例でお示します。
+    </p>
+
+    <div class="case-card">
+      <h4>田中花子さん（78歳・女性）</h4>
+      <div class="case-profile">
+        <div><span class="pf-label">家族背景</span>高齢の夫と二人暮らし（老老介護）</div>
+        <div><span class="pf-label">基礎疾患</span>高血圧、2型糖尿病</div>
+        <div><span class="pf-label">通院歴</span>かかりつけ医に長年通院中</div>
+        <div><span class="pf-label">認知機能</span>MMSE 26（MCIの可能性あり）</div>
+        <div><span class="pf-label">定期薬</span>ARB、Ca拮抗薬、SGLT2阻害薬</div>
+        <div><span class="pf-label">ある日の主訴</span>「階段を上がると息切れ」「足のむくみで靴が入らない」</div>
+      </div>
+
+      <div class="case-timeline">
+
+        <div class="case-step">
+          <h5><span class="step-tag">STEP 1</span>かかりつけ医での気づき → 連携シートAで専門医へ</h5>
+          <p>外来で評価：体重 <strong>2週間で+4kg</strong>（52→56kg）、胸部XPで心拡大あり、<strong>BNP 180 pg/mL</strong>。BNP≧100で「心不全」域。連携シートAにチェック（息切れ増悪 / BNP≧100 / 1週間で2kg以上の体重増加）と自由記載「2週間で4kg増加、BNP 180、精査・治療を依頼」を添え、専門医外来へ紹介。</p>
+        </div>
+
+        <div class="case-step">
+          <h5><span class="step-tag">STEP 2</span>入院 → 退院カンファレンス → 連携シートBでもどし紹介</h5>
+          <p>診断：<strong>HFpEF（EF 55%）</strong>。SGLT2阻害薬継続、<strong>MRA 新規追加</strong>、アゾセミド 15mg/日 新規追加。心臓リハ実施。退院カンファでケアマネ・訪問看護・薬剤師・栄養士・MSW・PTが情報共有。連携シートB主要記入：EF分類HFpEF / BNP安定時110 / 体重54.0kg / MRAに伴うK・腎機能の適切な間隔での確認要 / もどし紹介目安：BNPが前回比+40%以上 or 体重+2kg以上。<strong>心不全再入院予防継続管理料1（1,000点）算定。</strong></p>
+        </div>
+
+        <div class="case-step">
+          <h5><span class="step-tag">STEP 3</span>かかりつけ医がチームで支える退院後の生活</h5>
+          <p>毎回外来で心不全手帳を確認（体重・血圧・脈拍・自覚症状）。MRA内服中→<strong>K・腎機能を月1回確認</strong>。SGLT2阻害薬・ループ利尿薬のシックデイ・ルールを患者へ説明。訪問看護師から「足のむくみ・息切れの観察→FAX/ICTでかかりつけ医へ報告」、薬剤師から服薬カレンダー使用・居宅療養管理指導報告、ケアマネからデイの活動状況報告。<strong>心不全再入院予防継続管理料3を月1回算定。</strong></p>
+        </div>
+
+        <div class="case-step heart-step">
+          <h5><span class="step-tag">STEP 4</span>心不全増悪 → 早期のもどし紹介</h5>
+          <p>退院3ヶ月後、訪問看護師から「体重+2kg以上、息切れは訴えないが脈が早い」との報告。再受診で<strong>体重 56.5kg（+2.5kg）、BNP 192（+75%）、脈拍112回/分、心電図で心房細動の出現</strong>。連携シートBの「もどし紹介の目安」に該当。連携シートA再使用、自由記載「BNP 192（+75%）、心房細動により心不全増悪+体重増加あり。抗凝固薬を開始しました。早期の再診をお願いします」を添えてもどし紹介。</p>
+        </div>
+
+      </div>
+
+      <div style="margin-top:24px;padding:16px 20px;background:rgba(200,85,107,.08);border-radius:8px;font-size:.92rem;color:var(--primary-deep);text-align:center;font-weight:600">
+        ① 気づく → ② シートAで紹介 → ③ 入院・治療・シートBで戻し紹介 → ④ チームで継続管理 → ⑤ 状態変化を察知し早期再紹介
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     5. 診療ガイド (BNP 5-zone, body management, FAQ)
+     ============================================================ -->
+<section id="clinical-guide" class="section">
+  <div class="container">
+    <span class="section-eyebrow">CLINICAL GUIDE</span>
+    <h2 class="section-title">かかりつけ医向け診療ガイド</h2>
+    <p class="section-lede">
+      日常診療で迷わず心不全の診断・管理・連携が行えるよう、日本心不全学会2023年改訂ステートメントおよび2025年改訂版心不全診療ガイドラインに基づいた要点を一枚に集約しました。
+    </p>
+
+    <h3>1. ナトリウム利尿ペプチド（BNP／NT-proBNP）の読み方</h3>
+
+    <div class="bnp-alert">
+      <strong>⚠ ARNI（エンレスト）内服中の評価：</strong> ARNI内服中はネプリライシン（BNP分解酵素）阻害作用により<strong>BNPが偽高値となることがあります</strong>。<strong>NT-proBNP</strong> での評価が望ましいと考えられます。
+    </div>
+
+    <!-- BNPカラーバー（5段階） -->
+    <div class="bnp-bar">
+      <div class="bnp-bar-row head">
+        <div class="bnp-bar-cell">判定</div>
+        <div class="bnp-bar-cell">BNP (pg/mL)</div>
+        <div class="bnp-bar-cell">NT-proBNP (pg/mL)</div>
+      </div>
+      <div class="bnp-bar-row">
+        <div class="bnp-bar-cell zone zone-1-bg">除外</div>
+        <div class="bnp-bar-cell"><span class="value-mono">&lt; 18.4</span></div>
+        <div class="bnp-bar-cell"><span class="value-mono">&lt; 55</span></div>
+      </div>
+      <div class="bnp-bar-row">
+        <div class="bnp-bar-cell zone zone-2-bg">経過観察</div>
+        <div class="bnp-bar-cell"><span class="value-mono">18.4 〜 35</span></div>
+        <div class="bnp-bar-cell"><span class="value-mono">55 〜 125</span></div>
+      </div>
+      <div class="bnp-bar-row">
+        <div class="bnp-bar-cell zone zone-3-bg">前心不全<br>〜心不全</div>
+        <div class="bnp-bar-cell"><span class="value-mono">35 〜 100</span></div>
+        <div class="bnp-bar-cell"><span class="value-mono">125 〜 300</span></div>
+      </div>
+      <div class="bnp-bar-row">
+        <div class="bnp-bar-cell zone zone-4-bg">心不全</div>
+        <div class="bnp-bar-cell"><span class="value-mono">100 〜 200</span></div>
+        <div class="bnp-bar-cell"><span class="value-mono">300 〜 900</span></div>
+      </div>
+      <div class="bnp-bar-row">
+        <div class="bnp-bar-cell zone zone-5-bg">高リスク<br>心不全</div>
+        <div class="bnp-bar-cell"><span class="value-mono">≧ 200</span></div>
+        <div class="bnp-bar-cell"><span class="value-mono">≧ 900</span></div>
+      </div>
+    </div>
+
+    <table class="clinical-table">
+      <thead>
+        <tr>
+          <th style="width:130px">判定</th>
+          <th>臨床的解釈と推奨アクション</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="zone-cell zone-1-bg">除外</td>
+          <td><strong>心不全の可能性は極めて低い。</strong>呼吸器疾患・貧血・腎疾患・薬剤性浮腫などを鑑別。経過観察または他科紹介を検討。</td>
+        </tr>
+        <tr>
+          <td class="zone-cell zone-2-bg">経過観察</td>
+          <td><strong>心不全の可能性は低いが、可能なら経過観察。</strong>リスク因子（高血圧・糖尿病・心房細動）の評価と管理。症状や所見の悪化があれば再検。</td>
+        </tr>
+        <tr>
+          <td class="zone-cell zone-3-bg">前心不全<br>〜心不全</td>
+          <td><strong>前心不全（Stage A/B）または早期心不全の可能性。</strong>胸部X線・心電図を確認。<strong>早期心不全外来 または 心エコー可能な専門医</strong>へ紹介を検討。リスク因子の管理を強化。</td>
+        </tr>
+        <tr>
+          <td class="zone-cell zone-4-bg">心不全</td>
+          <td><strong>心不全の可能性が高い（Stage C）。</strong><strong>連携シートAで専門医へ紹介</strong>。心エコーを含む心機能評価を早期に実施。原因検索。</td>
+        </tr>
+        <tr>
+          <td class="zone-cell zone-5-bg">高リスク<br>心不全</td>
+          <td><strong>高リスク心不全（Stage C/D）の可能性が高い。</strong>速やかに専門医へ紹介し、原因検索・診療ガイドラインに準じた標準治療を開始。安静時呼吸困難など強い症状を伴う場合は救急対応も考慮。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pitfall-box">
+      <h4>解釈のピットフォール（補正因子）</h4>
+      <ul>
+        <li><strong>値が高く出る：</strong>加齢、腎機能低下（特にNT-proBNP）、心房細動</li>
+        <li><strong>値が低く出る：</strong>肥満（BMI≧30）</li>
+        <li><strong>判断のコツ：</strong>絶対値だけでなく、<span class="hilight">「前回比 BNP+40%以上 / NT-proBNP+30%以上の上昇」は心不全増悪サイン</span>。患者ごとのベースライン（安定時BNP）との比較が重要。</li>
+        <li><strong>高齢者：</strong>NT-proBNP値は加齢とともに上昇。75歳以上では生理的に300〜500pg/mL程度までは慎重に解釈。</li>
+      </ul>
+      <p style="margin:10px 0 0;font-size:.82rem;color:var(--ink-muted)">
+        参考：日本心不全学会 血中BNP/NT-proBNPを用いた心不全診療に関するステートメント 2023年改訂版、日本循環器学会・日本心不全学会 2025年改訂版心不全診療ガイドライン
+      </p>
+    </div>
+
+    <!-- クイックチェックリスト ===================================== -->
+    <h3>2. 心不全診療クイックチェックリスト</h3>
+    <p style="color:var(--ink-soft);font-size:.95rem;margin-bottom:6px">日常診療のデスクに置いて、迷ったときの即時参照用に。</p>
+
+    <div class="quickcheck">
+      <div class="quickcheck-header">明日からの心不全診療：要点早見表</div>
+      <div class="quickcheck-body">
+
+        <div class="quickcheck-block">
+          <h5>① 「迷ったら紹介」レッドフラッグ（1つでも該当 → 連携シートAで専門医へ）</h5>
+          <ul class="quickcheck-items">
+            <li>BNP ≧ 100 / NT-proBNP ≧ 300</li>
+            <li>数日で +2kg以上の体重増加</li>
+            <li>利尿薬増量しても改善しない浮腫</li>
+            <li>安静時の呼吸困難</li>
+            <li>BNP/NT-proBNPが前回比+30〜40%以上上昇</li>
+            <li>原因不明の倦怠感＋心電図異常</li>
+          </ul>
+        </div>
+
+        <div class="quickcheck-block">
+          <h5>② 日常観察ポイント（毎回外来で）</h5>
+          <ul class="quickcheck-items">
+            <li>心不全手帳の体重・血圧・脈拍・症状を確認</li>
+            <li>頸静脈怒張・下腿/仙骨部の浮腫・Ⅲ音を診察</li>
+            <li>ドライウェイト（連携シートB記載）との比較</li>
+            <li>BNP/NT-proBNPの推移を確認</li>
+            <li>症例に応じて適切な間隔での腎機能および電解質の確認</li>
+            <li>ヘモグロビン値や鉄動態の定期確認</li>
+          </ul>
+        </div>
+
+        <div class="quickcheck-block">
+          <h5>③ 薬剤の重要ルール（4つ）</h5>
+          <ul class="quickcheck-items">
+            <li><strong>SGLT2阻害薬：</strong>シックデイ（発熱・下痢・嘔吐・食思不振）は休薬</li>
+            <li><strong>HFrEFにおけるFantastic Four：</strong>低血圧でもふらつきなければ維持</li>
+            <li><strong>ARNI内服中：</strong>BNPが高めに測定される可能性あり、NT-ProBNPでの評価がベター</li>
+            <li><strong>鉄欠乏：</strong>貧血なくともフェリチン&lt;100 or TSAT&lt;20%なら鉄補充の検討</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 体液管理 ===================================== -->
+    <h3>3. 体液管理と利尿薬調整プロトコル</h3>
+    <p style="color:var(--ink-soft);font-size:.95rem">
+      <strong>目標：</strong>うっ血のない状態（ドライウェイト：連携シートBに記載）の維持。<br>
+      <strong>基本：</strong>心不全手帳の毎日の体重変化を見る。
+    </p>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:22px 24px;margin:18px 0">
+      <h4 style="margin-top:0;color:var(--primary-deep)">うっ血のサイン（フィジカルアセスメント）</h4>
+      <ul style="margin:0;padding-left:1.2em;color:var(--ink-soft);line-height:1.85">
+        <li><strong>頸静脈怒張：</strong>45度座位で胸骨角より3cm以上 → 右房圧上昇のサイン</li>
+        <li><strong>Ⅲ音聴取：</strong>容量負荷のサイン</li>
+        <li><strong>浮腫：</strong>前脛骨部、寝たきりなら仙骨部・背部を圧迫</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--primary-soft);border:2px solid var(--primary);border-radius:8px;padding:22px 24px;margin:18px 0">
+      <h4 style="margin-top:0;color:var(--primary)">利尿薬調整フローチャート（例）</h4>
+      <div style="padding:10px 0;border-bottom:1px dashed rgba(74,139,111,.3)">
+        <strong>① 体重+2kg以上 ＆ 浮腫あり</strong>
+        <p style="margin:6px 0 0;font-size:.92rem;color:var(--ink-soft);line-height:1.8">
+          → ループ利尿薬一時増量（例：フロセミド 10〜20mg追加）。経口で吸収が悪い場合は静注ボーラス（フロセミド 5〜20mg i.v.）も検討。1週間以内にNa・K・BUN・Crを確認。
+        </p>
+      </div>
+      <div style="padding:10px 0;border-bottom:1px dashed rgba(74,139,111,.3)">
+        <strong>② 改善しない、または安静時呼吸困難出現</strong>
+        <p style="margin:6px 0 0;font-size:.92rem;color:var(--ink-soft);line-height:1.8">
+          → 連携シートAで専門医へ紹介。トルバプタン導入（入院要）等を検討。
+        </p>
+      </div>
+      <div style="padding:10px 0">
+        <strong>③ 利尿薬増量後のCre上昇</strong>
+        <p style="margin:6px 0 0;font-size:.92rem;color:var(--ink-soft);line-height:1.8">
+          → 0.3mg/dL程度の一時的上昇なら、うっ血が残る限り中止しない。脱水所見なく体液過剰が持続なら継続可能（一過性のCre上昇は長期予後に影響しない：DOSE trial, N Engl J Med 2011; 364:797-805）。
+        </p>
+      </div>
+    </div>
+
+    <!-- FAQ ===================================== -->
+    <h3>4. 重要FAQ</h3>
+
+    <div class="faq-item">
+      <div class="faq-q">SGLT2阻害薬の「シックデイ・ルール」は？</div>
+      <div class="faq-a">
+        発熱・下痢・嘔吐・食思不振など<strong>「食べられない・飲めない」時は休薬</strong>してください。
+        <ul>
+          <li><strong>理由：</strong>脱水によるケトアシドーシス（正常血糖でも発症）や腎障害を防ぐため</li>
+          <li><strong>再開：</strong>食事・水分が十分に取れるようになってから</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">血圧が低い（SBP 90mmHg台）ですが、予後改善薬は減量すべき？</div>
+      <div class="faq-a">
+        <strong>ふらつき等の症状がなければ、減薬せず継続</strong>してください。
+        心不全治療薬（β遮断薬・ARNI・MRA・SGLT2）は予後改善薬です。数値だけで減量せず、可能な限り維持。減薬が必要な場合は、まずCa拮抗薬等の血管拡張薬や利尿薬の減量を先に検討してください。
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">貧血がなくても「鉄」を調べるべき？</div>
+      <div class="faq-a">
+        <strong>はい。</strong>心不全患者ではフェリチン・TSAT（血清鉄/TIBC）を測定してください。
+        <ul>
+          <li><strong>基準：</strong>フェリチン&lt;100、または 100〜299かつTSAT&lt;20% は「鉄欠乏」</li>
+          <li><strong>治療：</strong>心不全増悪を防ぐため、<strong>静注鉄剤</strong>による補充を検討（経口鉄剤は吸収されにくい）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">専門医が処方した薬を、かかりつけ医の判断で中止してよい？</div>
+      <div class="faq-a">
+        <strong>原則、まずは専門医にご相談ください。</strong>
+        専門医が導入した薬（特にFantastic Four、MRA、SGLT2阻害薬）は予後を改善するエビデンスのある薬です。HFimpEF（EF改善後の心不全）でも、EFが回復したからといって薬を止めると再悪化のリスクがあります。連携シートBに「治療継続中」の意図が記載されています。
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- ============================================================
+     7. 連携シート (2方式アクセス)
+     ============================================================ -->
+<section id="sheets" class="section">
+  <div class="container">
+    <span class="section-eyebrow">COORDINATION SHEETS</span>
+    <h2 class="section-title">連携シート（A・B）— ダウンロード／オンライン入力</h2>
+    <p class="section-lede">
+      連携で使用する2枚のシートを、<strong>Excelダウンロード</strong>と<strong>HTMLオンライン入力フォーム</strong>の両方で提供します。HTMLフォームに入力 → 印刷 or PDF保存して紹介状に添付できます。
+    </p>
+
+    <div class="sheet-grid">
+
+      <!-- Sheet A -->
+      <div class="sheet-card sheet-a">
+        <span class="sheet-tag">SHEET A — UPSTREAM</span>
+        <h4>連携シートA<br><span style="font-size:.78em;color:var(--ink-soft);font-weight:500">かかりつけ医 → 専門医</span></h4>
+        <div class="sheet-purpose">
+          紹介状とこのシート1枚で、専門医の外来へつながります。
+        </div>
+        <div class="sheet-actions">
+          <a href="sheet-A.html" class="sheet-btn primary" target="_blank" rel="noopener">
+            <span class="icon">📝</span>
+            <span class="label-block">
+              <strong>オンラインで入力する</strong>
+              <small>ブラウザ上で入力 → 印刷 or PDF保存</small>
+            </span>
+          </a>
+          <a href="downloads/sheet-A.xlsx" class="sheet-btn" download>
+            <span class="icon">📊</span>
+            <span class="label-block">
+              <strong>Excel版をダウンロード</strong>
+              <small>院内システムで編集・印刷</small>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Sheet B -->
+      <div class="sheet-card sheet-b">
+        <span class="sheet-tag">SHEET B — DOWNSTREAM</span>
+        <h4>連携シートB<br><span style="font-size:.78em;color:var(--ink-soft);font-weight:500">専門医 → かかりつけ医</span></h4>
+        <div class="sheet-purpose">
+          <strong>「明日からの個別指示書」</strong>として機能。ドライウェイト・薬剤の注意点・もどし紹介の目安が記載され、かかりつけ医はこの指示書通りに管理できます。
+        </div>
+        <div class="sheet-actions">
+          <a href="sheet-B.html" class="sheet-btn primary" target="_blank" rel="noopener">
+            <span class="icon">📝</span>
+            <span class="label-block">
+              <strong>オンラインで入力する</strong>
+              <small>ブラウザ上で入力 → 印刷 or PDF保存</small>
+            </span>
+          </a>
+          <a href="downloads/sheet-B.xlsx" class="sheet-btn" download>
+            <span class="icon">📊</span>
+            <span class="label-block">
+              <strong>Excel版をダウンロード</strong>
+              <small>院内システムで編集・印刷</small>
+            </span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:24px;padding:16px 20px;background:var(--surface-2);border-radius:6px;font-size:.88rem;color:var(--ink-soft);line-height:1.85">
+      <strong style="color:var(--primary-deep)">💡 連携の3つ目のツール：心不全手帳</strong><br>
+      シートA・Bに加えて、<strong>日本心不全学会の「心不全手帳」</strong>を患者さんへ渡し、毎朝の体重・血圧・脈拍を記録するよう指導してください。「医療スタッフ連携ノート」欄を活用すれば、訪問看護師・薬剤師・ケアマネからの気づきがかかりつけ医に届く仕組みになります。<a href="https://www.jhfs.or.jp/topics/files/techo3_book1.pdf" target="_blank" rel="noopener">手帳PDFをダウンロード ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     8. 令和8年度診療報酬改定 (NEW)
+     ============================================================ -->
+<section id="reimburse" class="section">
+  <div class="container">
+    <span class="section-eyebrow">REIMBURSEMENT — FY2026</span>
+    <h2 class="section-title">令和8年度診療報酬改定：心不全の「切れ目ない支援」体制</h2>
+    <p class="section-lede">
+      令和8年度改定では、心不全治療による再入院予防を推進する観点から、<strong>「心不全再入院予防継続管理料」（管理料1・2・3）</strong>が新設され、かかりつけ医による包括的継続管理が正当に評価されます。
+    </p>
+
+    <h3>心不全再入院予防継続管理料の3段階構造</h3>
+
+    <div class="reimburse-grid">
+      <div class="reimburse-card">
+        <span class="tag">入院</span>
+        <div class="title">管理料1</div>
+        <div class="scene">入院中1回限り<br>多職種チームによる早期介入</div>
+        <div class="points">1,000<small>点</small></div>
+      </div>
+      <div class="reimburse-card">
+        <span class="tag">外来（連携元）</span>
+        <div class="title">管理料2</div>
+        <div class="scene">外来 月1回・最長1年まで<br>連携元病院での外来管理</div>
+        <div class="points">700<small>点</small><br><span style="font-size:.85rem;color:var(--ink-soft);font-weight:400;display:block;margin-top:6px">6回目まで／7回目以降 225点</span></div>
+      </div>
+      <div class="reimburse-card">
+        <span class="tag">外来（連携先）</span>
+        <div class="title">管理料3</div>
+        <div class="scene">外来 月1回・最長1年まで<br><strong style="color:var(--primary-deep)">連携先かかりつけ医等で算定</strong></div>
+        <div class="points">400<small>点</small><br><span style="font-size:.85rem;color:var(--ink-soft);font-weight:400;display:block;margin-top:6px">6回目まで／7回目以降 225点</span></div>
+      </div>
+    </div>
+
+    <div class="reimburse-note">
+      <strong>管理料3（かかりつけ医が算定する場合）の主な要件：</strong>
+      <ul style="margin:8px 0 0;padding-left:1.2em">
+        <li>管理料1を算定した、専門医療機関からの逆紹介患者であること</li>
+        <li>医師（経験5年以上）＋看護師等（経験3年以上）のチーム体制</li>
+        <li>栄養食事指導が行える体制</li>
+        <li>管理料1・2算定機関が主催する研修会への参加</li>
+      </ul>
+    </div>
+
+    <div class="flow-image-wrap" style="margin-top:40px">
+      <img src="images/reimbursement-diagram.jpg" alt="令和8年度診療報酬改定：心不全再入院予防継続管理料の3段階構造">
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     9. 多職種連携・ACP・ICT
+     ============================================================ -->
+<section id="multi" class="section">
+  <div class="container">
+    <span class="section-eyebrow">MULTIDISCIPLINARY CARE</span>
+    <h2 class="section-title">多職種連携・ACP・ICT</h2>
+    <p class="section-lede">
+      心不全の「出口」を一人で背負わない。S-HFnet（顔の見える多職種ネットワーク）× シズみんシート（ACP）× シズケア＊かけはし（ICT）で、地域がチームになる。
+    </p>
+
+    <div class="multi-grid">
+      <div class="multi-card">
+        <h4>しずおかハートネット（S-HFnet）</h4>
+        <p>静岡心不全多職種連携の会。職種・経験不問、スタッフ参加歓迎の「顔の見える多職種ネットワーク」。地域で学び合い、みんなで支える心不全ケアを実践します。</p>
+        <a href="https://j-circ-assoc.or.jp/chfej_networks/しずおかハートネット（s-hfnet）/" target="_blank" rel="noopener" class="multi-link">S-HFnet 公式サイト</a>
+        　
+        <a href="http://www.instagram.com/shizuokahfnetwork/" target="_blank" rel="noopener" class="multi-link" style="color:#c13584">公式Instagram</a>
+      </div>
+
+      <div class="multi-card acp">
+        <h4>シズみんシート（シズケア＊ささえあい連携シート）</h4>
+        <p>心不全手帳で「身体（バイタル）」を守り、シズみんシートで「心（意思）」を守る。本人の希望・家族の思い・最期をどこで過ごしたいか——多職種で集め、可視化するACPツール。</p>
+        <a href="https://ssc.shizuoka-med.or.jp/acp/" target="_blank" rel="noopener" class="multi-link">シズみんシート 詳細</a>
+      </div>
+
+      <div class="multi-card">
+        <h4>シズケア＊かけはし（ICT連携ツール）</h4>
+        <p>電話・FAXに代わる、迅速かつセキュアなタイムライン形式の情報共有。体重・血圧・症状・写真・動画の共有で、すれ違いをなくし、地域チームが一斉に動ける環境を実現。</p>
+        <a href="https://ssc.shizuoka-med.or.jp/care/" target="_blank" rel="noopener" class="multi-link">シズケア＊かけはし 詳細</a>
+      </div>
+
+      <div class="multi-card acp">
+        <h4>心不全手帳（日本心不全学会）</h4>
+        <p>「チーム医療のパスポート」。患者が日々の体重・血圧を記録し、訪問看護師・薬剤師・ケアマネ・かかりつけ医が「医療スタッフ連携ノート」で気づきを共有する連絡帳機能を備えます。</p>
+        <a href="https://www.jhfs.or.jp/topics/files/techo3_book1.pdf" target="_blank" rel="noopener" class="multi-link">心不全手帳 PDF（学会公開）</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     10. 5つのお願い (CTA)
+     ============================================================ -->
+<section id="requests" class="section">
+  <div class="container">
+    <span class="section-eyebrow">CALL TO ACTION</span>
+    <h2 class="section-title">心不全連携における5つのお願い</h2>
+    <p class="section-lede">
+      かかりつけ医と専門医、そして多職種がつながれば、診療負担は減り、患者さんの予後も良くなります。
+    </p>
+
+    <div class="requests">
+      <ul class="request-list">
+        <li class="request-item">
+          <div class="request-num">1</div>
+          <div>
+            <h5>心不全手帳を患者さんに渡してください</h5>
+            <p>心不全患者さんに手帳を渡し、「毎朝、体重・血圧・脈拍を記録する」ように指導してください。</p>
+          </div>
+        </li>
+        <li class="request-item">
+          <div class="request-num">2</div>
+          <div>
+            <h5>BNP / NT-proBNPの「変化率」を見てください</h5>
+            <p>絶対値より、前回からの上昇率が重要。BNP+40%以上、NT-proBNP+30%以上は増悪サインです。</p>
+          </div>
+        </li>
+        <li class="request-item">
+          <div class="request-num">3</div>
+          <div>
+            <h5>迷わず紹介してください</h5>
+            <p>体重+2kg・BNP上昇があれば、連携シートAで専門医へつないでください。「悩む時間より、つなぐ行動」が患者を守ります。</p>
+          </div>
+        </li>
+        <li class="request-item">
+          <div class="request-num">4</div>
+          <div>
+            <h5>薬を止めないでください</h5>
+            <p>専門医が処方した予後改善薬（Fantastic Four・SGLT2・MRA）は、かかりつけ医の判断で中止せず、まずご相談ください。</p>
+          </div>
+        </li>
+        <li class="request-item">
+          <div class="request-num">5</div>
+          <div>
+            <h5>チームを頼ってください</h5>
+            <p>訪問看護・ケアマネ・薬剤師・栄養士・療法士と一緒に、チームで心不全患者を診る体制を作ってください。心不全手帳・ICT・シズみんシートが助けます。</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     11. 資材ダウンロード・外部リンク
+     ============================================================ -->
+<section id="resources" class="section">
+  <div class="container">
+    <span class="section-eyebrow">RESOURCES</span>
+    <h2 class="section-title">資材ダウンロード・外部リンク</h2>
+    <p class="section-lede">
+      連携シート（A・B）、診療管理ガイド、クイックチェックリストなど、しずおかハートリンクの実装に必要なすべての資材を一括でご利用いただけます。
+    </p>
+
+    <div class="resource-grid">
+
+      <!-- 医師・医療機関向け -->
+      <div class="resource-group">
+        <h4>📋 医師・医療機関向け</h4>
+
+        <a href="sheet-A.html" class="btn-download" target="_blank" rel="noopener">
+          <span class="ico">📝</span>
+          <span>連携シートA（かかりつけ医→専門医）<br><small style="color:var(--ink-muted)">オンライン入力フォーム</small></span>
+        </a>
+        <a href="downloads/sheet-A.xlsx" class="btn-download" download>
+          <span class="ico">📊</span>
+          <span>連携シートA（Excel版）</span>
+        </a>
+        <a href="sheet-B.html" class="btn-download" target="_blank" rel="noopener">
+          <span class="ico">📝</span>
+          <span>連携シートB（専門医→かかりつけ医）<br><small style="color:var(--ink-muted)">オンライン入力フォーム</small></span>
+        </a>
+        <a href="downloads/sheet-B.xlsx" class="btn-download" download>
+          <span class="ico">📊</span>
+          <span>連携シートB（Excel版）</span>
+        </a>
+
+        <hr class="resource-divider">
+
+        <a href="https://www.j-circ.or.jp/cms/wp-content/uploads/2025/03/JCS2025_Kato.pdf" class="btn-download" target="_blank" rel="noopener">
+          <span class="ico">📕</span>
+          <span>日本循環器学会／日本心不全学会<br>2025年改訂版 心不全診療ガイドライン ↗</span>
+        </a>
+        <a href="https://www.jhfs.or.jp/statement-guideline/statement20231017.html" class="btn-download" target="_blank" rel="noopener">
+          <span class="ico">📗</span>
+          <span>日本心不全学会<br>BNP/NT-proBNPステートメント 2023年改訂版 ↗</span>
+        </a>
+
+        <hr class="resource-divider">
+
+        <p class="resource-subhead">早期心不全外来 実施医療機関（静岡市内）</p>
+        <div class="facility-block">
+          <span class="facility-name">静岡市立静岡病院</span>
+          <a href="https://www.shizuokahospital.jp/department/internal-medicine/cardiovascular-medicine/heartfailure-outpatient/" target="_blank" rel="noopener">早期心不全外来と短期支援入院 ↗</a><br>
+          <a href="https://www.shizuokahospital.jp/media/soukisinhuzen241120.xlsx" target="_blank" rel="noopener">情報シート（Excel）↗</a>
+
+          <span class="facility-name">静岡済生会総合病院</span>
+          <a href="https://shizuoka-saiseikai.jp/bnp/" target="_blank" rel="noopener">早期心不全BNP外来 ↗</a><br>
+          <a href="https://shizuoka-saiseikai.jp/bnp/img/checksheet.pdf" target="_blank" rel="noopener">チェックシート（PDF）↗</a>
+        </div>
+      </div>
+
+      <!-- 患者指導・多職種連携向け -->
+      <div class="resource-group">
+        <h4>🤝 患者指導・多職種連携向け</h4>
+
+        <p class="resource-subhead">心不全手帳・ACP・ICT</p>
+        <a href="https://www.jhfs.or.jp/topics/files/techo3_book1.pdf" class="btn-download" target="_blank" rel="noopener">
+          <span class="ico">📓</span>
+          <span>心不全手帳（PDF全ページ／心不全学会）↗</span>
+        </a>
+        <a href="https://ssc.shizuoka-med.or.jp/acp/" class="btn-download" target="_blank" rel="noopener">
+          <span class="ico">🤝</span>
+          <span>シズケア＊ささえあい連携シート（ACP）↗</span>
+        </a>
+        <a href="https://ssc.shizuoka-med.or.jp/care/" class="btn-download" target="_blank" rel="noopener">
+          <span class="ico">💻</span>
+          <span>シズケア＊かけはし（ICT連携）↗</span>
+        </a>
+
+        <hr class="resource-divider">
+
+        <p class="resource-subhead">静岡心不全多職種連携の会</p>
+        <a href="https://j-circ-assoc.or.jp/chfej_networks/しずおかハートネット（s-hfnet）/" class="btn-download" target="_blank" rel="noopener">
+          <span class="ico">👥</span>
+          <span>しずおかハートネット（S-HFnet）<br><small style="color:var(--ink-muted)">心不全多職種連携の会</small> ↗</span>
+        </a>
+        <a href="http://www.instagram.com/shizuokahfnetwork/" class="btn-download" target="_blank" rel="noopener" style="border-color:#c13584;color:#c13584">
+          <span class="ico">📷</span>
+          <span>公式Instagram ↗</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-title">しずおかハートリンク（S-HF link）</div>
+    <div class="footer-sub">静岡心不全連携システム　|　2026年改訂版</div>
+
+    <div>静岡市静岡医師会・静岡市清水医師会</div>
+    <hr>
+    <div class="footer-meta">
+      © Shizuoka City Medical Association. All Rights Reserved.
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     Subtle reveal animation
+     ============================================================ -->
+<script>
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  }
+</script>
+
+</body>
+</html>
